@@ -1,0 +1,69 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "MainUnit.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma link "VirtualTrees"
+#pragma link "VirtualTrees.AncestorVCL"
+#pragma link "VirtualTrees.BaseAncestorVCL"
+#pragma link "VirtualTrees.BaseTree"
+#pragma resource "*.dfm"
+TMainForm *MainForm;
+//---------------------------------------------------------------------------
+__fastcall TMainForm::TMainForm(TComponent* Owner)
+	: TForm(Owner)
+{
+    LibraryStringTree->NodeDataSize = sizeof(NodeStruct);
+}
+//---------------------------------------------------------------------------
+void FillStringTree(TVirtualStringTree *stringTree)
+{
+	//Останавливаем обновление интерфейса
+	stringTree->BeginUpdate();
+
+	//Очистить дерево
+	stringTree->Clear();
+
+
+
+	for(ULONGLONG i=0; i<10000; i++)
+	{
+		if(HistoryDatabase->Step())
+		{
+			//Добавляем очередную запись
+			PVirtualNode entryNode = stringTree->AddChild(stringTree->RootNode);
+
+			//Заполняем данные узла
+			NodeStruct *nodeData = (NodeStruct*)stringTree->GetNodeData(entryNode);
+
+			nodeData->Id = HistoryDatabase->GetId();
+			nodeData->Year = HistoryDatabase->GetUrl();
+			nodeData->Pages = HistoryDatabase->GetTitle();
+			nodeData->Condition = HistoryDatabase->GetLastVisit();
+		}
+        else break;
+	}
+
+	//Включаем обновление интерфейса
+	stringTree->EndUpdate();
+}
+//---------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------
+void __fastcall TMainForm::LibraryStringTreeGetText(TBaseVirtualTree *Sender, PVirtualNode Node,
+          TColumnIndex Column, TVSTTextType TextType, UnicodeString &CellText)
+
+{
+    if(!Node) return;
+	NodeStruct *nodeData = (NodeStruct*)Sender->GetNodeData(Node);
+	switch(Column)
+	{
+		case 0: CellText = nodeData->Id; break;
+		case 1: CellText = nodeData->Url; break;
+        case 2: CellText = nodeData->Title; break;
+	}
+}
+//---------------------------------------------------------------------------
