@@ -1,0 +1,20 @@
+//---------------------------------------------------------------------------
+
+#ifndef Thread2H
+#define Thread2H
+//---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+//---------------------------------------------------------------------------
+class Thread2 : public TThread
+{
+private:
+	int randomQuantity;
+    float ratio;
+protected:
+	void __fastcall Execute();
+	void __fastcall AddBookToCont();
+public:
+	__fastcall Thread2(bool CreateSuspended);
+};
+//---------------------------------------------------------------------------
+#endif

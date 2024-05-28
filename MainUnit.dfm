@@ -11,16 +11,89 @@ object MainForm: TMainForm
   Font.Name = 'Segoe UI'
   Font.Style = []
   TextHeight = 15
+  object NumOfBookGet: TLabel
+    Left = 24
+    Top = 377
+    Width = 153
+    Height = 21
+    AutoSize = False
+    BiDiMode = bdLeftToRight
+    Caption = #1050#1085#1080#1075' '#1087#1086#1083#1091#1095#1077#1085#1086': '
+    Color = clSilver
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentBiDiMode = False
+    ParentColor = False
+    ParentFont = False
+    Transparent = False
+    Layout = tlCenter
+  end
+  object BooksToRepair: TLabel
+    Left = 224
+    Top = 377
+    Width = 199
+    Height = 22
+    AutoSize = False
+    Caption = #1050#1085#1080#1075' '#1085#1091#1078#1076#1072#1102#1097#1080#1093#1089#1103' '#1074' '#1088#1077#1084#1086#1085#1090#1077': '
+    Color = clSilver
+    ParentColor = False
+    Transparent = False
+    Layout = tlCenter
+  end
+  object BooksToRepair2: TLabel
+    Left = 472
+    Top = 377
+    Width = 217
+    Height = 22
+    AutoSize = False
+    Caption = #1050#1085#1080#1075' '#1085#1091#1078#1076#1072#1102#1097#1080#1093#1089#1103' '#1074' '#1088#1077#1084#1086#1085#1090#1077': '
+    Color = clSilver
+    ParentColor = False
+    Transparent = False
+    Layout = tlCenter
+  end
+  object ProgBar1Label: TLabel
+    Left = 24
+    Top = 329
+    Width = 153
+    Height = 15
+    Alignment = taCenter
+    AutoSize = False
+    Layout = tlCenter
+  end
+  object ProgBar2Label: TLabel
+    Left = 224
+    Top = 329
+    Width = 199
+    Height = 15
+    Alignment = taCenter
+    AutoSize = False
+    Color = clBtnFace
+    ParentColor = False
+    Transparent = False
+  end
+  object ProgBar3Label: TLabel
+    Left = 472
+    Top = 329
+    Width = 217
+    Height = 15
+    Alignment = taCenter
+    AutoSize = False
+    Layout = tlCenter
+  end
   object LibraryStringTree: TVirtualStringTree
     Left = 0
-    Top = 0
+    Top = 56
     Width = 814
     Height = 193
-    Align = alTop
+    Align = alCustom
     DefaultNodeHeight = 19
     Header.AutoSizeIndex = 0
     Header.Options = [hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
-    TabOrder = 0
+    TabOrder = 1
     OnGetText = LibraryStringTreeGetText
     Touch.InteractiveGestures = [igPan, igPressAndTap]
     Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
@@ -56,11 +129,75 @@ object MainForm: TMainForm
       end>
   end
   object FillTable: TButton
-    Left = 16
-    Top = 216
+    Left = 684
+    Top = 472
     Width = 107
     Height = 49
     Caption = #1047#1072#1087#1086#1083#1085#1080#1090#1100
-    TabOrder = 1
+    TabOrder = 2
+    OnClick = FillTableClick
+  end
+  object GetBooks: TButton
+    Left = 24
+    Top = 268
+    Width = 153
+    Height = 49
+    Caption = #1055#1086#1083#1091#1095#1080#1090#1100' '#1082#1085#1080#1075#1080' '#1089#1086' '#1089#1082#1083#1072#1076#1072
+    TabOrder = 3
+    OnClick = GetBooksClick
+  end
+  object InspectBooks: TButton
+    Left = 224
+    Top = 268
+    Width = 199
+    Height = 49
+    Caption = #1054#1089#1084#1086#1090#1088#1077#1090#1100' '#1074#1089#1077' '#1082#1085#1080#1075#1080
+    TabOrder = 4
+  end
+  object ProgressBar1: TProgressBar
+    Left = 24
+    Top = 350
+    Width = 153
+    Height = 21
+    Hint = #1092#1099#1074#1072#1092#1099#1074#1072
+    BarColor = clBlack
+    BackgroundColor = clBlack
+    TabOrder = 0
+  end
+  object ProgressBar2: TProgressBar
+    Left = 224
+    Top = 350
+    Width = 199
+    Height = 21
+    TabOrder = 5
+  end
+  object InspectWithHelp: TButton
+    Left = 472
+    Top = 268
+    Width = 217
+    Height = 49
+    Caption = #1054#1089#1084#1086#1088#1077#1090#1100' '#1074#1089#1077' '#1082#1085#1080#1075#1080' '#1089' '#1087#1086#1084#1086#1097#1085#1080#1082#1086#1084
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 6
+  end
+  object PlaceTheBook: TButton
+    Left = 32
+    Top = 472
+    Width = 217
+    Height = 49
+    Caption = #1056#1072#1089#1089#1090#1072#1074#1080#1090#1100' '#1082#1085#1080#1075#1080' '#1087#1086' '#1087#1086#1083#1082#1072#1084
+    TabOrder = 7
+  end
+  object ProgressBar3: TProgressBar
+    Left = 472
+    Top = 350
+    Width = 217
+    Height = 21
+    TabOrder = 8
   end
 end

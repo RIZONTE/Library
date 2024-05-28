@@ -1,0 +1,345 @@
+#ifndef BOOK_H_INCLUDED
+#define BOOK_H_INCLUDED
+#include <vector>
+#include "Templates.h"
+#include "sqlite3.h"
+
+
+enum class BookType : int // перечисление типов книг
+{
+    Fiction,   // Художественная литература
+    Journal,   // Журнал
+    Textbook   // Учебник
+};
+
+enum class Genre : int // перечисление жанров художественной литературы
+{
+    Novel,  // Роман
+    Tale,   // Повесть
+    Drama,  // Пьеса
+    Poem    // Поэма
+};
+
+enum class Discipline : int  //перечисление дисциплин учебников
+{
+    Physics,     //Физика
+    Economics,   //Экономика
+    Programming, //Программирование
+    Philosophy   //Философия
+};
+
+enum class Theme : int  //перечисление для журналов, их тематики
+{
+    Auto,
+    Sport,
+    Science
+};
+
+wstring PrintGenre( Genre genre );
+wstring PrintDiscipline( Discipline discipline);
+wstring PrintTheme( Theme theme);
+
+BookType RandomBookType();
+
+class Book
+{
+protected:
+    int publicationYear;
+    int condition;       //Внешний вид книги, мера ее потрепанности
+    int numberOfPage;    //Кол-во страниц
+    Book();              //Чтобы нельзя было создать экземпляр
+public:
+    virtual ~Book() {};
+    int GetYear() const { return publicationYear; }
+    int GetCondition() const { return condition; }
+    int GetNumberOfPage() const { return numberOfPage; }
+    virtual void Read( int pages ) const = 0;
+    virtual BookType GetType() const = 0;
+
+    static Book* createBook(BookType type);
+};
+
+class Fiction : public Book
+{
+private:
+    Genre genre;
+public:
+    Fiction() : Book() { genre = Genre(rand() % 3); }
+    Fiction(int year, int pages, int cond, int spec)
+    {
+        publicationYear = year;
+        condition = cond;
+        numberOfPage = pages;
+        genre = (Genre)spec;
+    }
+    void Read( int pages ) const { wcout << L"Вы прочитали "
+                                   << pages << L" страниц из книги, жанр которой "
+                                   << PrintGenre(genre) << endl; }
+    BookType GetType() const { return BookType::Fiction; }
+    Genre GetGenre() {return genre;}
+};
+
+class Textbook : public Book
+{
+private:
+    Discipline discipline;
+public:
+    Textbook() : Book() { discipline = Discipline(rand() % 3); }
+    Textbook(int year, int pages, int cond, int spec)
+    {
+        publicationYear = year;
+        condition = cond;
+        numberOfPage = pages;
+        discipline = (Discipline)spec;
+    }
+    void Read( int pages ) const { wcout << L"Вы прочитали " << pages
+                                   << L" страниц из учебника по дисциплине: "
+                                   << PrintDiscipline(discipline) << endl; }
+    BookType GetType() const { return BookType::Textbook; }
+    Discipline GetDisc() { return discipline; }
+};
+
+
+class Journal : public Book
+{
+private:
+    Theme theme;
+public:
+    Journal() : Book() { theme = Theme(rand() % 3); }
+    Journal(int year, int pages, int cond, int spec)
+    {
+        publicationYear = year;
+        condition = cond;
+        numberOfPage = pages;
+        theme = (Theme)spec;
+    }
+    void Read( int pages ) const { wcout << L"Вы прочитали " << pages
+                                   << L" страниц журнала, тема которого: "
+                                   << PrintTheme(theme) << endl; }
+    BookType GetType() const { return BookType::Journal; }
+    Theme GetTheme() { return theme; }
+};
+
+
+typedef Book* PtrBook;
+
+// Общий класс для контейнеров
+class BookContainer
+{
+protected:
+    BookContainer() {};
+public:
+    virtual int GetQuantity() const = 0;
+    virtual void AddBook(PtrBook book) = 0;
+    virtual PtrBook GetByIndex(int i) const = 0;
+};
+
+// Итераторы
+
+//Итератор для 1-го контейнера
+class BookContainer_1_Iterator : public Iterator<PtrBook>
+{
+protected:
+    const PtrBook * Bookcase;
+    int Pos;                  //индекс текущего эл-та
+    int Quantity;             //кол-во эл-тов
+public:
+    BookContainer_1_Iterator(const PtrBook * bookcase, int quantity)
+    {
+        Bookcase = bookcase;
+        Quantity = quantity;
+        Pos = 0;
+    }
+    void First() { Pos = 0; };
+    void Next() { Pos++; };
+    bool IsDone() const { return Pos >= Quantity; };
+    PtrBook GetCurrent() const { return Bookcase[Pos]; };
+};
+
+//Итератор для 2-го контейнера
+class BookContainer_2_Iterator : public Iterator<PtrBook>
+{
+protected:
+    const std::vector<PtrBook> *Bookcase;
+    std::vector<PtrBook>::const_iterator iter;
+public:
+    BookContainer_2_Iterator(const std::vector<PtrBook> *bookcase)
+    {
+        Bookcase = bookcase;
+        iter = Bookcase->begin();
+    }
+    void First() { iter = Bookcase->begin(); };
+    void Next() { ++iter; };
+    bool IsDone() const { return iter == Bookcase->end(); };
+    PtrBook GetCurrent() const { return *iter; };
+};
+
+//итератор для 3-го контейнера
+class BookContainer_3_Iterator : public Iterator<PtrBook>
+{
+protected:
+    BookContainer * bookcase;
+    int Pos;
+public:
+    BookContainer_3_Iterator(BookContainer *Bookcase)
+    {
+        bookcase = Bookcase;
+        Pos = 1;
+    }
+    void First() { Pos = 1; };
+    void Next() { Pos++; };
+    bool IsDone() const { return Pos == bookcase->GetQuantity(); };
+    PtrBook GetCurrent() const { return bookcase->GetByIndex(Pos); };
+};
+
+// Контейнеры
+
+// Контейнер с динамическим массивом
+class BookContainer1 : public BookContainer
+{
+protected:
+    PtrBook * Bookcase;
+    int BookQuantity;
+    int MaxQuantity;
+public:
+    BookContainer1(int maxQuantity);
+    virtual ~BookContainer1();
+    void AddBook(PtrBook book);
+
+    int GetQuantity() const { return BookQuantity; };
+    PtrBook GetByIndex(int i) const { return Bookcase[i]; };
+
+    Iterator<PtrBook> *GetIterator()
+    {
+        return new BookContainer_1_Iterator(Bookcase, BookQuantity);
+    }
+};
+
+
+// Контейнер с вектором
+class BookContainer2 : public BookContainer
+{
+protected:
+    std::vector<PtrBook> Bookcase;
+public:
+    virtual ~BookContainer2();
+    void AddBook(PtrBook book) { Bookcase.push_back(book); };
+    int GetQuantity() const { return Bookcase.size(); };
+    PtrBook GetByIndex(int i) const { return Bookcase[i]; };
+
+    Iterator<PtrBook> *GetIterator()
+    {
+        return new BookContainer_2_Iterator(&Bookcase);
+    }
+};
+
+//Контейнер на основе БД SQLite
+class BookContainer3 : public BookContainer
+{
+protected:
+    sqlite3* Database;
+    int id;
+public:
+    BookContainer3();
+    virtual ~BookContainer3();
+    void AddBook(PtrBook book);
+    int GetQuantity() const;
+    PtrBook GetByIndex(int i) const;
+
+    Iterator<PtrBook> *GetIterator()
+    {
+        return new BookContainer_3_Iterator(this);
+    };
+};
+
+//Декораторы
+
+//Декоратор для отбора книг по их типу
+class BookTypeDecorator : public IteratorDecorator<PtrBook>
+{
+protected:
+    BookType Type;
+public:
+    BookTypeDecorator(Iterator<PtrBook> *it, BookType type) : IteratorDecorator(it)
+    {
+        Type = type;
+    }
+    void First()
+    {
+        It->First();
+        while(!It->IsDone() && It->GetCurrent()->GetType() != Type)
+        {
+            It->Next();
+        }
+    }
+    void Next()
+    {
+        do
+        {
+            It->Next();
+        } while (!It->IsDone() && It->GetCurrent()->GetType() != Type);
+    }
+};
+
+
+//Декоратор для отбора по колву страниц
+class NumberPagesDecorator : public IteratorDecorator<PtrBook>
+{
+protected:
+    int low;
+    int high;
+public:
+    NumberPagesDecorator(Iterator<PtrBook> *it, int l, int h) : IteratorDecorator(it)
+    {
+        low = l;
+        high = h;
+    }
+    void First()
+    {
+        It->First();
+        while(!It->IsDone() && (It->GetCurrent()->GetNumberOfPage() < high && It->GetCurrent()->GetNumberOfPage() > low))
+        {
+            It->Next();
+        }
+    }
+    void Next()
+    {
+        do
+        {
+            It->Next();
+        } while (!It->IsDone() && (It->GetCurrent()->GetNumberOfPage() < high && It->GetCurrent()->GetNumberOfPage() > low));
+    }
+};
+
+//Декоратор для отбора по году издания
+class YearDecorator : public IteratorDecorator<PtrBook>
+{
+protected:
+    int low;
+    int high;
+public:
+    YearDecorator(Iterator<PtrBook> *it, int l, int h) : IteratorDecorator(it)
+    {
+        low = l;
+        high = h;
+    }
+    void First()
+    {
+        It->First();
+        while(!It->IsDone() && (It->GetCurrent()->GetYear() < high && It->GetCurrent()->GetYear() > low))
+        {
+            It->Next();
+        }
+    }
+    void Next()
+    {
+        do
+        {
+            It->Next();
+        } while (!It->IsDone() && (It->GetCurrent()->GetYear() < high && It->GetCurrent()->GetYear() > low));
+    }
+};
+
+
+
+#endif // BOOK_H_INCLUDED

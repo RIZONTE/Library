@@ -1,9 +1,11 @@
 ﻿#ifndef BOOK_H_INCLUDED
 #define BOOK_H_INCLUDED
 #include <vector>
+#include <iostream>
 #include "Templates.h"
 #include "sqlite3.h"
 
+using namespace std;
 
 enum class BookType : int // перечисление типов книг
 {
@@ -38,6 +40,7 @@ enum class Theme : int  //перечисление для журналов, их
 wstring PrintGenre( Genre genre );
 wstring PrintDiscipline( Discipline discipline);
 wstring PrintTheme( Theme theme);
+wstring PrintType( BookType type);
 
 BookType RandomBookType();
 
@@ -178,18 +181,18 @@ public:
 class BookContainer_3_Iterator : public Iterator<PtrBook>
 {
 protected:
-    BookContainer * bookcase;
+	BookContainer * bookcase;
     int Pos;
 public:
     BookContainer_3_Iterator(BookContainer *Bookcase)
     {
         bookcase = Bookcase;
-        Pos = 1;
+		Pos = 0;
     }
-    void First() { Pos = 1; };
-    void Next() { Pos++; };
-    bool IsDone() const { return Pos == bookcase->GetQuantity(); };
-    PtrBook GetCurrent() const { return bookcase->GetByIndex(Pos); };
+    void First() { Pos = 0; };
+	void Next() { Pos++; };
+	bool IsDone() const { return Pos == bookcase->GetQuantity(); };
+	PtrBook GetCurrent() const { return bookcase->GetByIndex(Pos+1); };
 };
 
 // Контейнеры

@@ -1,0 +1,60 @@
+//---------------------------------------------------------------------------
+
+#include <System.hpp>
+#pragma hdrstop
+
+#include "Thread2.h"
+#include "MainUnit.h"
+#pragma package(smart_init)
+//---------------------------------------------------------------------------
+
+//   Important: Methods and properties of objects in VCL can only be
+//   used in a method called using Synchronize, for example:
+//
+//      Synchronize(&UpdateCaption);
+//
+//   where UpdateCaption could look like:
+//
+//      void __fastcall Thread2::UpdateCaption()
+//      {
+//        Form1->Caption = "Updated in a thread";
+//      }
+//---------------------------------------------------------------------------
+__fastcall Thread2::Thread2(bool CreateSuspended)
+	: TThread(CreateSuspended)
+{
+    FreeOnTerminate = true;
+}
+//---------------------------------------------------------------------------
+void __fastcall Thread2::Execute()
+{
+    srand(time(0));
+	randomQuantity = rand()%90;
+	ratio = 100.0/randomQuantity;
+
+	for( progress = 0; progress<randomQuantity ; progress++)
+	{
+		Synchronize(&AddBookToCont);
+        Sleep(70);
+		Synchronize(&UpdateProgressBar1);
+	}
+	Synchronize(&UpdateNumOfBookGet);
+}
+//---------------------------------------------------------------------------
+void __fastcall Thread2::AddBookToCont()
+{
+	MainForm->AddBookToContainer();
+	ProgressBar1->Position = i*ratio;
+	}
+	ProgressBar1->Position = 100;
+	NumOfBookGet->Caption += UnicodeString(randomQuantity);
+}
+//---------------------------------------------------------------------------
+void __fastcall Thread2::UpdateProgressBar1()
+{
+	MainForm->ProgressBar1->Position = progress*ratio;
+}
+void __fastcall Thread2::UpdateNumOfBookGet()
+{
+	MainForm->NumOfBookGet->Caption += UnicodeString(randomQuantity);
+}

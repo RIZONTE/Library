@@ -1,20 +1,28 @@
-#include <iostream>
+﻿#include <iostream>
 #include <ctime>
 using namespace std;
-
 
 #include "Book.h"
 
 
+wstring PrintType( BookType type)
+{
+    switch(type)
+    {
+        case BookType::Fiction : return L"Художественная литература";
+        case BookType::Journal  : return L"Журнал";
+        case BookType::Textbook  : return L"Учебная литература";
+    }
+}
 
 wstring PrintGenre( Genre genre )
 {
     switch(genre)
     {
-        case Genre::Drama : return L"пьеса";
-        case Genre::Novel : return L"роман";
-        case Genre::Poem : return L"поэма";
-        case Genre::Tale : return L"повесть";
+		case Genre::Drama : return L"Пьеса";
+		case Genre::Novel : return L"Роман";
+		case Genre::Poem : return L"Поэма";
+        case Genre::Tale : return L"Повесть";
         default: return L"Неизвестно";
     }
 }
@@ -44,6 +52,7 @@ wstring PrintTheme( Theme theme)
 
 Book::Book()
 {
+
     publicationYear = (rand() % 20) + 1980;
     condition = rand() % 100;
     numberOfPage = (rand() % 150) + 150;
@@ -119,7 +128,7 @@ BookType RandomBookType()
 
 BookContainer3::BookContainer3()
 {
-    int  openResult = sqlite3_open("Library.db", &Database);
+    int  openResult = sqlite3_open("C:\\Users\\danch\\Documents\\Embarcadero\\Studio\\Projects\\Library\\Library.db", &Database);
 
     if(openResult != SQLITE_OK)//если не смогли открыть базу данных
     {
