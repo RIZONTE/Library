@@ -1,0 +1,29 @@
+//---------------------------------------------------------------------------
+
+#ifndef Thread2H
+#define Thread2H
+//---------------------------------------------------------------------------
+#include <System.Classes.hpp>
+//---------------------------------------------------------------------------
+class Thread2 : public TThread
+{
+private:
+	Iterator<PtrBook> *It
+    bool RepairBooks;
+	bool getingBooks;
+    bool inspectingBooks;
+	int randomQuantity;
+	float ratio;
+    float progress;
+protected:
+	void __fastcall Execute();
+	void __fastcall AddBookToCont();
+    void __fastcall UpdateProgressBar1();
+	void __fastcall UpdateProgBar1Label();
+	void __fastcall CompleteGetBooks();
+	void __fastcall UpdateTable();
+public:
+	__fastcall Thread2(bool CreateSuspended, bool getting, bool inspecting, Iterator<PtrBook> *it);
+};
+//---------------------------------------------------------------------------
+#endif

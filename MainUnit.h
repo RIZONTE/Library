@@ -20,27 +20,25 @@ class TMainForm : public TForm
 {
 __published:	// IDE-managed Components
 	TVirtualStringTree *LibraryStringTree;
-	TButton *FillTable;
 	TButton *GetBooks;
 	TButton *InspectBooks;
 	TProgressBar *ProgressBar1;
 	TProgressBar *ProgressBar2;
-	TButton *InspectWithHelp;
-	TButton *PlaceTheBook;
+	TButton *RepairBooks;
 	TLabel *NumOfBookGet;
 	TProgressBar *ProgressBar3;
 	TLabel *BooksToRepair;
-	TLabel *BooksToRepair2;
 	TLabel *ProgBar1Label;
 	TLabel *ProgBar2Label;
 	TLabel *ProgBar3Label;
 	void __fastcall LibraryStringTreeGetText(TBaseVirtualTree *Sender, PVirtualNode Node,
           TColumnIndex Column, TVSTTextType TextType, UnicodeString &CellText);
-	void __fastcall FillTableClick(TObject *Sender);
 	void __fastcall GetBooksClick(TObject *Sender);
+	void __fastcall InspectBooksClick(TObject *Sender);
+	void __fastcall RepairBooksClick(TObject *Sender);
 
 private:	// User declarations
-	BookContainer3 Container;
+	BookContainer2 Container;
 	Iterator<PtrBook> *it;
 public:		// User declarations
 	void AddBookToContainer();
@@ -51,6 +49,8 @@ public:		// User declarations
 //---------------------------------------------------------------------------
 extern PACKAGE TMainForm *MainForm;
 //---------------------------------------------------------------------------
+void FillStringTree(TVirtualStringTree *stringTree, Iterator<PtrBook> *it);
+//---------------------------------------------------------------------------
 typedef struct
 {
 	ULONGLONG Id;
@@ -60,4 +60,5 @@ typedef struct
 	UnicodeString Specific;
     UnicodeString Type;
 } NodeStruct;
+//---------------------------------------------------------------------------
 #endif

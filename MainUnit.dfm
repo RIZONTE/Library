@@ -2,8 +2,8 @@ object MainForm: TMainForm
   Left = 0
   Top = 0
   Caption = 'MainForm'
-  ClientHeight = 553
-  ClientWidth = 814
+  ClientHeight = 422
+  ClientWidth = 643
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -12,8 +12,8 @@ object MainForm: TMainForm
   Font.Style = []
   TextHeight = 15
   object NumOfBookGet: TLabel
-    Left = 24
-    Top = 377
+    Left = 40
+    Top = 329
     Width = 153
     Height = 21
     AutoSize = False
@@ -32,32 +32,20 @@ object MainForm: TMainForm
     Layout = tlCenter
   end
   object BooksToRepair: TLabel
-    Left = 224
-    Top = 377
-    Width = 199
+    Left = 240
+    Top = 329
+    Width = 153
     Height = 22
     AutoSize = False
-    Caption = #1050#1085#1080#1075' '#1085#1091#1078#1076#1072#1102#1097#1080#1093#1089#1103' '#1074' '#1088#1077#1084#1086#1085#1090#1077': '
-    Color = clSilver
-    ParentColor = False
-    Transparent = False
-    Layout = tlCenter
-  end
-  object BooksToRepair2: TLabel
-    Left = 472
-    Top = 377
-    Width = 217
-    Height = 22
-    AutoSize = False
-    Caption = #1050#1085#1080#1075' '#1085#1091#1078#1076#1072#1102#1097#1080#1093#1089#1103' '#1074' '#1088#1077#1084#1086#1085#1090#1077': '
+    Caption = #1053#1091#1078#1085#1072' '#1088#1077#1089#1090#1072#1074#1088#1072#1094#1080#1103': '
     Color = clSilver
     ParentColor = False
     Transparent = False
     Layout = tlCenter
   end
   object ProgBar1Label: TLabel
-    Left = 24
-    Top = 329
+    Left = 40
+    Top = 281
     Width = 153
     Height = 15
     Alignment = taCenter
@@ -65,9 +53,9 @@ object MainForm: TMainForm
     Layout = tlCenter
   end
   object ProgBar2Label: TLabel
-    Left = 224
-    Top = 329
-    Width = 199
+    Left = 240
+    Top = 281
+    Width = 153
     Height = 15
     Alignment = taCenter
     AutoSize = False
@@ -76,9 +64,9 @@ object MainForm: TMainForm
     Transparent = False
   end
   object ProgBar3Label: TLabel
-    Left = 472
-    Top = 329
-    Width = 217
+    Left = 440
+    Top = 281
+    Width = 153
     Height = 15
     Alignment = taCenter
     AutoSize = False
@@ -86,77 +74,67 @@ object MainForm: TMainForm
   end
   object LibraryStringTree: TVirtualStringTree
     Left = 0
-    Top = 56
-    Width = 814
+    Top = 0
+    Width = 643
     Height = 193
-    Align = alCustom
+    Align = alTop
     DefaultNodeHeight = 19
-    Header.AutoSizeIndex = 0
+    Header.AutoSizeIndex = -1
+    Header.MainColumn = 1
     Header.Options = [hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
     TabOrder = 1
     OnGetText = LibraryStringTreeGetText
     Touch.InteractiveGestures = [igPan, igPressAndTap]
     Touch.InteractiveGestureOptions = [igoPanSingleFingerHorizontal, igoPanSingleFingerVertical, igoPanInertia, igoPanGutter, igoParentPassthrough]
+    ExplicitWidth = 665
     Columns = <
       item
         Position = 0
-        Text = 'Id'
-      end
-      item
-        Position = 1
         Text = #1043#1086#1076' '#1080#1079#1076#1072#1085#1080#1103
         Width = 80
       end
       item
-        Position = 2
+        Position = 1
         Text = #1050#1086#1083'-'#1074#1086' '#1089#1090#1088#1072#1085#1080#1094
         Width = 100
       end
       item
-        Position = 3
+        Position = 2
         Text = #1057#1086#1089#1090#1086#1103#1085#1080#1077
         Width = 80
       end
       item
-        Position = 4
+        Position = 3
         Text = #1044#1086#1087'. '#1080#1085#1092#1086#1088#1084#1072#1094#1080#1103
         Width = 115
       end
       item
-        Position = 5
+        Position = 4
         Text = #1058#1080#1087
         Width = 150
       end>
   end
-  object FillTable: TButton
-    Left = 684
-    Top = 472
-    Width = 107
-    Height = 49
-    Caption = #1047#1072#1087#1086#1083#1085#1080#1090#1100
-    TabOrder = 2
-    OnClick = FillTableClick
-  end
   object GetBooks: TButton
-    Left = 24
-    Top = 268
+    Left = 40
+    Top = 220
     Width = 153
     Height = 49
     Caption = #1055#1086#1083#1091#1095#1080#1090#1100' '#1082#1085#1080#1075#1080' '#1089#1086' '#1089#1082#1083#1072#1076#1072
-    TabOrder = 3
+    TabOrder = 2
     OnClick = GetBooksClick
   end
   object InspectBooks: TButton
-    Left = 224
-    Top = 268
-    Width = 199
+    Left = 240
+    Top = 220
+    Width = 153
     Height = 49
-    Caption = #1054#1089#1084#1086#1090#1088#1077#1090#1100' '#1074#1089#1077' '#1082#1085#1080#1075#1080
-    TabOrder = 4
+    Caption = #1054#1089#1084#1086#1090#1088#1077#1090#1100' '#1082#1085#1080#1075#1080
+    TabOrder = 3
+    OnClick = InspectBooksClick
   end
   object ProgressBar1: TProgressBar
-    Left = 24
-    Top = 350
+    Left = 40
+    Top = 302
     Width = 153
     Height = 21
     Hint = #1092#1099#1074#1072#1092#1099#1074#1072
@@ -165,39 +143,32 @@ object MainForm: TMainForm
     TabOrder = 0
   end
   object ProgressBar2: TProgressBar
-    Left = 224
-    Top = 350
-    Width = 199
+    Left = 240
+    Top = 302
+    Width = 153
     Height = 21
-    TabOrder = 5
+    TabOrder = 4
   end
-  object InspectWithHelp: TButton
-    Left = 472
-    Top = 268
-    Width = 217
+  object RepairBooks: TButton
+    Left = 440
+    Top = 220
+    Width = 153
     Height = 49
-    Caption = #1054#1089#1084#1086#1088#1077#1090#1100' '#1074#1089#1077' '#1082#1085#1080#1075#1080' '#1089' '#1087#1086#1084#1086#1097#1085#1080#1082#1086#1084
+    Caption = #1056#1077#1089#1090#1072#1074#1088#1080#1088#1086#1074#1072#1090#1100' '#1082#1085#1080#1075#1080
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -12
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
-    TabOrder = 6
-  end
-  object PlaceTheBook: TButton
-    Left = 32
-    Top = 472
-    Width = 217
-    Height = 49
-    Caption = #1056#1072#1089#1089#1090#1072#1074#1080#1090#1100' '#1082#1085#1080#1075#1080' '#1087#1086' '#1087#1086#1083#1082#1072#1084
-    TabOrder = 7
+    TabOrder = 5
+    OnClick = RepairBooksClick
   end
   object ProgressBar3: TProgressBar
-    Left = 472
-    Top = 350
-    Width = 217
+    Left = 440
+    Top = 302
+    Width = 153
     Height = 21
-    TabOrder = 8
+    TabOrder = 6
   end
 end

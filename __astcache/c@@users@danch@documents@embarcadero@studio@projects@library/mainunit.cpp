@@ -16,7 +16,15 @@ TMainForm *MainForm;
 __fastcall TMainForm::TMainForm(TComponent* Owner)
 	: TForm(Owner)
 {
-    LibraryStringTree->NodeDataSize = sizeof(NodeStruct);
+	LibraryStringTree->NodeDataSize = sizeof(NodeStruct);
+	it = Container.GetIterator();
+	RepairBooks->Enabled = false;
+	InspectBooks->Enabled = false;
+}
+//---------------------------------------------------------------------------
+Iterator<PtrBook>* TMainForm::GetIterator()
+{
+	return Container.GetIterator();
 }
 //---------------------------------------------------------------------------
 void FillStringTree(TVirtualStringTree *stringTree, Iterator<PtrBook> *it)
@@ -26,8 +34,6 @@ void FillStringTree(TVirtualStringTree *stringTree, Iterator<PtrBook> *it)
 
 	//Очистить дерево
 	stringTree->Clear();
-
-	int Id = 1;
 
 	for(it->First(); !it->IsDone(); it->Next())
 	{
@@ -39,7 +45,6 @@ void FillStringTree(TVirtualStringTree *stringTree, Iterator<PtrBook> *it)
 
 		PtrBook book = it->GetCurrent();
 
-		nodeData->Id = Id;
 		nodeData->Year =  book->GetYear();
 		nodeData->Pages =  book->GetNumberOfPage();
 		nodeData->Condition = book->GetCondition();
@@ -56,7 +61,6 @@ void FillStringTree(TVirtualStringTree *stringTree, Iterator<PtrBook> *it)
 				nodeData->Specific = PrintTheme(((Journal *)book)->GetTheme());
 				break;
 		}
-		Id++;
 	}
 
 	//Включаем обновление интерфейса
@@ -71,43 +75,37 @@ void __fastcall TMainForm::LibraryStringTreeGetText(TBaseVirtualTree *Sender, PV
 	NodeStruct *nodeData = (NodeStruct*)Sender->GetNodeData(Node);
 	switch(Column)
 	{
-		case 0: CellText = nodeData->Id; break;
-		case 1: CellText = nodeData->Year; break;
-		case 2: CellText = nodeData->Pages; break;
-		case 3: CellText = nodeData->Condition; break;
-		case 4: CellText = nodeData->Specific; break;
-		case 5: CellText = nodeData->Type; break;
+		case 0: CellText = nodeData->Year; break;
+		case 1: CellText = nodeData->Pages; break;
+		case 2: CellText = nodeData->Condition; break;
+		case 3: CellText = nodeData->Specific; break;
+		case 4: CellText = nodeData->Type; break;
 	}
-}
-//---------------------------------------------------------------------------
-void __fastcall TMainForm::FillTableClick(TObject *Sender)
-{
-	AddBookToContainer();
-
-	it = Container.GetIterator();
-
-	FillStringTree(LibraryStringTree, it);
 }
 //---------------------------------------------------------------------------
 void TMainForm::AddBookToContainer()
 {
-    srand(time(0));
-	int randomQuantity = rand()%90;
-	float ratio = 100.0/randomQuantity;
-
-	for( int i = 0; i<randomQuantity ; i++)
-	{
-		Container.AddBook(Book::createBook(RandomBookType()));
-		Sleep(70);
-		ProgressBar1->Position = i*ratio;
-	}
-    ProgressBar1->Position = 100;
-	NumOfBookGet->Caption += UnicodeString(randomQuantity);
+	//srand(time(0));
+	Container.AddBook(Book::createBook(RandomBookType()));
 }
 //---------------------------------------------------------------------------
 void __fastcall TMainForm::GetBooksClick(TObject *Sender)
 {
-	th = new Thread1(true);
+	th = new Thread2(true, true, false, false, it);
+	th->Resume();
+}
+//---------------------------------------------------------------------------
+void __fastcall TMainForm::InspectBooksClick(TObject *Sender)
+{
+	th = new Thread2(true, false, true, false, it);
+	th->Resume();
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TMainForm::RepairBooksClick(TObject *Sender)
+{
+    th = new Thread2(true, false, false, true, it);
 	th->Resume();
 }
 //---------------------------------------------------------------------------

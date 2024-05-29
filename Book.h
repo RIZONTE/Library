@@ -54,8 +54,9 @@ protected:
 public:
     virtual ~Book() {};
     int GetYear() const { return publicationYear; }
-    int GetCondition() const { return condition; }
-    int GetNumberOfPage() const { return numberOfPage; }
+	int GetCondition() const { return condition; }
+	int GetNumberOfPage() const { return numberOfPage; }
+    void Repair() { condition = 80; }
     virtual void Read( int pages ) const = 0;
     virtual BookType GetType() const = 0;
 
@@ -318,31 +319,60 @@ public:
 class YearDecorator : public IteratorDecorator<PtrBook>
 {
 protected:
-    int low;
-    int high;
+	int low;
+	int high;
 public:
-    YearDecorator(Iterator<PtrBook> *it, int l, int h) : IteratorDecorator(it)
-    {
+	YearDecorator(Iterator<PtrBook> *it, int l, int h) : IteratorDecorator(it)
+	{
         low = l;
-        high = h;
+		high = h;
     }
-    void First()
-    {
-        It->First();
-        while(!It->IsDone() && (It->GetCurrent()->GetYear() < high && It->GetCurrent()->GetYear() > low))
-        {
-            It->Next();
-        }
-    }
-    void Next()
-    {
-        do
-        {
-            It->Next();
-        } while (!It->IsDone() && (It->GetCurrent()->GetYear() < high && It->GetCurrent()->GetYear() > low));
-    }
+	void First()
+	{
+		It->First();
+		while(!It->IsDone() && (It->GetCurrent()->GetYear() < high && It->GetCurrent()->GetYear() > low))
+		{
+			It->Next();
+		}
+	}
+	void Next()
+	{
+		do
+		{
+			It->Next();
+		} while (!It->IsDone() && (It->GetCurrent()->GetYear() < high && It->GetCurrent()->GetYear() > low));
+	}
 };
 
-
+//Декоратор для отбора книг по состоянию
+class ConditionDecorator : public IteratorDecorator<PtrBook>
+{
+protected:
+	int low;
+	int high;
+public:
+	ConditionDecorator(Iterator<PtrBook> *it, int l, int h) : IteratorDecorator(it)
+	{
+        low = l;
+		high = h;
+    }
+	void First()
+	{
+		It->First();
+		//int cond = It->GetCurrent()->GetCondition();
+		while(!It->IsDone() && (It->GetCurrent()->GetCondition() > high || It->GetCurrent()->GetCondition() < low))
+		{
+			It->Next();
+		}
+	}
+	void Next()
+	{
+		int cond = It->GetCurrent()->GetCondition();
+		do
+		{
+			It->Next();
+		} while(!It->IsDone() && (It->GetCurrent()->GetCondition() > high || It->GetCurrent()->GetCondition() < low));
+	}
+};
 
 #endif // BOOK_H_INCLUDED
